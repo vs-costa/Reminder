@@ -24,8 +24,8 @@
                         </div>
 
                         <div class="botoesTarefa">
-                            <CheckCircle class="iconeConcluir" @click="concluirTarefa(index)" color="#54ba91" cursor="pointer" />
-                            <XCircle @click="confirmarRemocao(index)" color="#ff4003" cursor="pointer" />
+                            <CheckCircle class="iconeConcluir" @click="concluirTarefa(tarefa)" color="#54ba91" cursor="pointer" />
+                            <XCircle @click="confirmarRemocao(tarefa)" color="#ff4003" cursor="pointer" />
                         </div>
                     </div>
 

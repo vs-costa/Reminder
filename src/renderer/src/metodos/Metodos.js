@@ -35,7 +35,11 @@ export default {
         armazenarTarefas() {
             localStorage.setItem("tarefas", JSON.stringify(this.tarefas))
         },
-        
+        atualizarIndices() {
+            for (let i = 0; i < this.tarefas.length; i++) {
+                this.tarefas[i].index = i;
+            }
+        },
         obterData() {
             const dataAtual = new Date();
             const dia = String(dataAtual.getDate()).padStart(2, '0');
@@ -62,9 +66,9 @@ export default {
             const dataAtual = new Date();
             return dataTarefa < dataAtual;
         },
-        concluirTarefa(index) {
-            if (!this.tarefas[index].feito) {
-                this.tarefas[index].feito = true;
+        concluirTarefa(tarefa) {
+            if (!tarefa.feito) {
+                tarefa.feito = true;
                 this.armazenarTarefas();
                 this.showModal = true;
                 setTimeout(() => {
@@ -75,21 +79,24 @@ export default {
         armazenarTarefasConcluidas() {
             localStorage.setItem("tarefasConcluidas", JSON.stringify(this.tarefasConcluidas));
         },
-        confirmarRemocao(index) {
-            if (confirm(`Você deseja remover a tarefa "${this.tarefas[index].texto}"?`)) {
-                this.removerTarefa(index);
+        confirmarRemocao(tarefa) {
+            if (confirm(`Você deseja remover a tarefa "${tarefa.texto}"?`)) {
+                this.removerTarefa(tarefa);
             }
         },
-        removerTarefa(index) {
-            this.tarefas.splice(index, 1);
-            this.armazenarTarefas();
+        removerTarefa(tarefa) {
+            const index = this.tarefas.indexOf(tarefa);
+            if (index !== -1) {
+                this.tarefas.splice(index, 1);
+                this.armazenarTarefas();
+            }
         },
         toogleDescricao(index) {
             this.tarefas[index].mostrarDescricao = !this.tarefas[index].mostrarDescricao;
         },
     },
 
-    
+
 
 
     created() {
