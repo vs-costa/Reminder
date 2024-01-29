@@ -1,4 +1,4 @@
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default {
 
@@ -7,6 +7,7 @@ export default {
             tarefas: [],
             tarefasConcluidas: [],
             showModal: false,
+            tarefaEmEdicao: null,
             newTarefa: {
                 feito: false,
                 data: this.obterData(),
@@ -18,8 +19,12 @@ export default {
     },
     methods: {
         adicionarTarefa() {
-            if (this.newTarefa.texto) {
-                this.tarefas.push({ ...this.newTarefa });
+            if (this.newTarefa.texto && this.newTarefa.data) {
+                let textoTarefa = this.newTarefa.texto;
+                if (textoTarefa.length > 50) {
+                    textoTarefa = textoTarefa.substring(0, 50);
+                }
+                this.tarefas.push({ ...this.newTarefa, texto: textoTarefa, id: uuidv4() });
                 this.newTarefa = {
                     feito: false,
                     data: this.obterData(),
@@ -29,21 +34,16 @@ export default {
                 this.armazenarTarefas();
                 this.ordenarTarefasPorData();
             } else {
-                alert("O título da tarefa é obrigatório")
+                alert("O título e data da tarefa são obrigatórios")
             }
         },
         armazenarTarefas() {
             localStorage.setItem("tarefas", JSON.stringify(this.tarefas))
         },
-        atualizarIndices() {
-            for (let i = 0; i < this.tarefas.length; i++) {
-                this.tarefas[i].index = i;
-            }
-        },
         obterData() {
             const dataAtual = new Date();
-            const dia = String(dataAtual.getDate()).padStart(2, '0');
-            const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // Adicione +1 aqui para obter o mês correto
+            const dia = String(dataAtual.getDate());
+            const mes = String(dataAtual.getMonth() + 1);
             const ano = dataAtual.getFullYear();
 
             return `${dia}/${mes}/${ano}`;
@@ -64,6 +64,8 @@ export default {
         isDataPassada(data) {
             const dataTarefa = new Date(data);
             const dataAtual = new Date();
+            dataAtual.setDate(dataAtual.getDate() - 1);
+
             return dataTarefa < dataAtual;
         },
         concluirTarefa(tarefa) {
@@ -75,9 +77,6 @@ export default {
                     this.showModal = false;
                 }, 1500);
             }
-        },
-        armazenarTarefasConcluidas() {
-            localStorage.setItem("tarefasConcluidas", JSON.stringify(this.tarefasConcluidas));
         },
         confirmarRemocao(tarefa) {
             if (confirm(`Você deseja remover a tarefa "${tarefa.texto}"?`)) {
@@ -91,16 +90,32 @@ export default {
                 this.armazenarTarefas();
             }
         },
-        toogleDescricao(index) {
-            this.tarefas[index].mostrarDescricao = !this.tarefas[index].mostrarDescricao;
+        toogleDescricao(id, lista) {
+            const tarefa = lista.find(tarefa => tarefa.id === id);
+            if (tarefa) {
+                tarefa.mostrarDescricao = !tarefa.mostrarDescricao;
+            }
+        },
+        abrirFormularioEdicao(tarefa) {
+            this.tarefaEmEdicao = { ...tarefa };
+        },
+        editarTarefa() {
+            const index = this.tarefas.findIndex(t => t.id === this.tarefaEmEdicao.id);
+            if (index !== -1) {
+                this.tarefas[index] = this.tarefaEmEdicao;
+                this.armazenarTarefas();
+                this.ordenarTarefasPorData();
+            }
+            this.tarefaEmEdicao = null;
+            this.$forceUpdate();
+        },
+        cancelarEdicao() {
+            this.tarefaEmEdicao = null;
         },
     },
 
-
-
-
     created() {
         this.tarefas = localStorage.getItem("tarefas") ? JSON.parse(localStorage.getItem("tarefas")) : this.tarefas;
-        this.ordenarTarefasPorData(); // Ordenar tarefas quando a página é carregada
+        this.ordenarTarefasPorData();
     },
 }

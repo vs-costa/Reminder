@@ -22,6 +22,8 @@
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
     "lucide-vue-next": "^0.314.0",
+    "uuid": "^9.0.1",
+    "vue-full-calendar": "^2.8.1-0",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

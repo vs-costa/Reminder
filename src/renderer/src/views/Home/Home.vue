@@ -15,7 +15,7 @@
                 <div v-for="(tarefa, index) in tarefasEmAndamento" :key="index" class="tarefa">
 
                     <div class="textoData">
-                        <div class="tarefaTexto" @click="toogleDescricao(index)">
+                        <div class="tarefaTexto" @click="toogleDescricao(tarefa.id)">
                             <p>{{ tarefa.texto }}</p>
                         </div>
 
@@ -24,7 +24,10 @@
                         </div>
 
                         <div class="botoesTarefa">
-                            <CheckCircle class="iconeConcluir" @click="concluirTarefa(tarefa)" color="#54ba91" cursor="pointer" />
+                            <CheckCircle class="iconeConcluir" @click="concluirTarefa(tarefa)" color="#54ba91"
+                                cursor="pointer" />
+                            <CircleEllipsis class="iconeEditar" @click="abrirFormularioEdicao(tarefa)" color="#f59e0b"
+                                cursor="pointer" />
                             <XCircle @click="confirmarRemocao(tarefa)" color="#ff4003" cursor="pointer" />
                         </div>
                     </div>
@@ -44,10 +47,9 @@
                         </div>
                     </div>
 
+                    <ModalEditar v-if="tarefaEmEdicao" :tarefaEmEdicao="tarefaEmEdicao" @confirmar="editarTarefa"
+                        @cancelar="cancelarEdicao" />
                 </div>
-
-
-
             </div>
 
             <div class="botaoContainer">
@@ -58,8 +60,8 @@
 
                 <button class="adicionar" @click="adicionarTarefa()">Adicionar</button>
 
-                <button class="limparTudo" @click="tarefas = []; armazenarTarefas()" v-if="tarefas.length">Limpar
-                    tudo</button>
+                <!-- <button class="limparTudo" @click="tarefas = []; armazenarTarefas()" v-if="tarefas.length">Limpar
+                    tudo</button> -->
             </div>
 
         </div>
@@ -68,15 +70,17 @@
 
 <script>
 
-import { CheckCircle, XCircle } from 'lucide-vue-next';
+import { CheckCircle, XCircle, CircleEllipsis } from 'lucide-vue-next';
 import Metodos from '../../metodos/Metodos.js'
+import ModalEditar from '../../components/ModalEditar/ModalEditar.vue';
 
 export default {
 
     extends: Metodos,
 
     components: {
-        CheckCircle, XCircle
+        CheckCircle, XCircle, CircleEllipsis,
+        ModalEditar
     },
 
     computed: {
@@ -126,14 +130,14 @@ hr {
     text-align: justify;
     border: solid 1px #F5E8C7;
     padding: 8px;
-    border-radius: 8px 0px 0px 8px;
+    border-radius: 8px;
 }
 
 .tarefaData {
     border: solid 1px #F5E8C7;
     text-align: center;
     padding: 8px;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 8px;
 }
 
 .toogleDescricao {
@@ -154,7 +158,6 @@ hr {
 .tarefaTexto {
     cursor: pointer;
 }
-
 
 .botaoContainer {
 
@@ -219,10 +222,13 @@ hr {
 }
 
 .iconeConcluir {
-    margin-right: 10px;
+    margin-right: 8px;
+    margin-left: 8px;
 }
 
-
+.iconeEditar {
+    margin-right: 8px;
+}
 
 .adicionar {
     background-color: #007bff;
@@ -238,7 +244,7 @@ hr {
     }
 }
 
-.limparTudo {
+/* .limparTudo {
     background-color: #dc3545;
     border: 1px solid #dc3545;
     display: block;
@@ -250,7 +256,7 @@ hr {
         color: #fff;
         opacity: 0.8;
     }
-}
+} */
 
 .modal {
     position: fixed;
@@ -267,7 +273,7 @@ hr {
 
 .modal h3 {
     background-color: transparent;
-    color: #363062;
+    color: #1f2937;
 }
 
 .modal-content {
