@@ -19,11 +19,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/daygrid": "^6.1.10",
+    "@fullcalendar/vue3": "^6.1.10",
     "@jamescoyle/vue-icon": "^0.1.2",
     "@mdi/js": "^7.4.47",
     "lucide-vue-next": "^0.314.0",
     "uuid": "^9.0.1",
-    "vue-full-calendar": "^2.8.1-0",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

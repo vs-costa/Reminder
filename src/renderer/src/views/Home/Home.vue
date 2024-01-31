@@ -15,9 +15,10 @@
                 <div v-for="(tarefa, index) in tarefasEmAndamento" :key="index" class="tarefa">
 
                     <div class="textoData">
-                        <div class="tarefaTexto" @click="toogleDescricao(tarefa.id)">
+                        <div class="tarefaTexto" @click="toogleDescricao(tarefa.id, tarefas)">
                             <p>{{ tarefa.texto }}</p>
                         </div>
+
 
                         <div class="tarefaData" :class="{ 'data-passada': isDataPassada(tarefa.data) }">
                             <p>{{ formatarData(tarefa.data) }}</p>
@@ -43,7 +44,7 @@
 
                     <div class="modal" v-if="showModal">
                         <div class="modal-content">
-                            <h3>{{ `Tarefa "${tarefa.texto}"" concluída!` }}</h3>
+                            <h3>Tarefa concluída!</h3>
                         </div>
                     </div>
 
@@ -138,6 +139,7 @@ hr {
     text-align: center;
     padding: 8px;
     border-radius: 8px;
+    min-width: 90px;
 }
 
 .toogleDescricao {

@@ -118,6 +118,7 @@ export default {
     text-align: center;
     padding: 8px;
     border-radius: 8px;
+    min-width: 90px;
 }
 
 hr {
