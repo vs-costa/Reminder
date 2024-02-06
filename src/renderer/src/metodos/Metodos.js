@@ -112,6 +112,13 @@ export default {
         cancelarEdicao() {
             this.tarefaEmEdicao = null;
         },
+        atualizarTarefaNoCalendario(tarefaAtualizada) {
+            const index = this.tarefas.findIndex(tarefa => tarefa.id === tarefaAtualizada.id);
+            if (index !== -1) {
+                this.tarefas[index] = tarefaAtualizada;
+                this.armazenarTarefas();
+            }
+        }
     },
 
     created() {
