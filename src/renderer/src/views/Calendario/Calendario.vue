@@ -11,7 +11,10 @@
   
 <script>
 import FullCalendar from '@fullcalendar/vue3';
+import { toMoment } from '@fullcalendar/moment';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { formatDate } from '@fullcalendar/core';
 import Metodos from '../../metodos/Metodos';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vue';
@@ -19,6 +22,8 @@ import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vu
 
 export default {
     extends: Metodos,
+
+
 
     components: {
         FullCalendar,
@@ -34,6 +39,8 @@ export default {
     },
 
 
+
+
     computed: {
         tarefasEmAndamento() {
             return this.tarefas.filter(tarefa => !tarefa.feito).map(tarefa => {
@@ -47,7 +54,7 @@ export default {
         },
         calendarOptions() {
             return {
-                plugins: [dayGridPlugin],
+                plugins: [dayGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next',
@@ -60,6 +67,8 @@ export default {
                 eventClick: this.mostrarDescricao,
                 eventMouseEnter: this.mudarCursorParaPointer,
                 eventMouseLeave: this.mudarCursorParaPadrao,
+                editable: true,
+                eventDrop: this.handleEventDrop,
             };
         },
     },
@@ -72,6 +81,17 @@ export default {
         },
         mudarCursorParaPadrao(info) {
             info.el.style.cursor = 'default';
+        },
+        handleEventDrop(info) {
+            const droppedEvent = info.event;
+            const originalEventObject = info.oldEvent;
+
+            const updatedTaskIndex = this.tarefas.findIndex(tarefa => tarefa === originalEventObject.extendedProps.task);
+            if (updatedTaskIndex !== -1) {
+                const isoDateString = droppedEvent.start.toISOString().split('T')[0];
+                this.tarefas[updatedTaskIndex].data = isoDateString;
+                this.armazenarTarefas();
+            }
         },
     },
 
