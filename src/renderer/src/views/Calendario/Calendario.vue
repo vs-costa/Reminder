@@ -1,8 +1,14 @@
 <template>
     <div>
-        <h1>Calendário</h1>
+        <div>
+            <h1>Calendário</h1>
+        </div>
+        <div class="prevNext">
+            <ChevronLeft class="prev" @click="goToPrev" />
+            <ChevronRight class="next" @click="goToNext" />
+        </div>
         <div class="calendarioContainer">
-            <FullCalendar :options="calendarOptions" />
+            <FullCalendar ref="fullCalendar" :options="calendarOptions" />
             <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModal="tarefaEmVisualizacao != null"
                 @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null" />
         </div>
@@ -11,14 +17,12 @@
   
 <script>
 import FullCalendar from '@fullcalendar/vue3';
-import { toMoment } from '@fullcalendar/moment';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { formatDate } from '@fullcalendar/core';
 import Metodos from '../../metodos/Metodos';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vue';
-// import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-vue-next';
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 export default {
     extends: Metodos,
@@ -28,8 +32,8 @@ export default {
     components: {
         FullCalendar,
         ModalCalendario,
-        // ChevronRightIcon,
-        // ChevronLeftIcon,
+        ChevronRight,
+        ChevronLeft,
     },
 
     data() {
@@ -57,8 +61,8 @@ export default {
                 plugins: [dayGridPlugin, interactionPlugin],
                 initialView: 'dayGridMonth',
                 headerToolbar: {
-                    left: 'prev,next',
-                    center: 'title',
+                    left: 'title',
+                    center: false,
                     right: 'dayGridMonth,dayGridWeek,dayGridDay',
                 },
                 weekends: true,
@@ -93,6 +97,12 @@ export default {
                 this.armazenarTarefas();
             }
         },
+        goToPrev() {
+            this.$refs.fullCalendar.getApi().prev();
+        },
+        goToNext() {
+            this.$refs.fullCalendar.getApi().next();
+        },
     },
 
 }
@@ -101,11 +111,36 @@ export default {
 <style scoped lang="css">
 h1 {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .calendarioContainer {
     width: 70%;
     margin: 0 auto;
 }
+
+.prevNext {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    top: 40px;
+    background-color: transparent;
+}
+
+.prev,
+.next {
+    cursor: pointer;
+    padding: 8px;
+    margin-left: 2px;
+    margin-right: 2px;
+    z-index: 1;
+    background-color: #2C3E50;
+    border-radius: 5px;
+}
+
+.prev:hover, .next:hover{
+    background-color: #1A252F;
+}
+
 </style>
   

@@ -22,7 +22,6 @@
   text-align: center;
   color: #F5E8C7;
   margin: 50px auto;
-  background-color: #363062;
 }
 
 #nav {
