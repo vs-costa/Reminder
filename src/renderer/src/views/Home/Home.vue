@@ -29,7 +29,7 @@
                                 cursor="pointer" />
                             <CircleEllipsis class="iconeEditar" @click="abrirFormularioEdicao(tarefa)" color="#f59e0b"
                                 cursor="pointer" />
-                            <XCircle @click="confirmarRemocao(tarefa)" color="#ff4003" cursor="pointer" />
+                            <XCircle @click="confirmarDeletar(tarefa)" color="#ff4003" cursor="pointer" />
                         </div>
                     </div>
 
@@ -44,12 +44,15 @@
 
                     <div class="modal" v-if="showModal">
                         <div class="modal-content">
-                            <h3>Tarefa concluída!</h3>
+                            <CheckCircle size="50" color="#54ba91"/>
+                            <h2>Tarefa concluída!</h2>
                         </div>
                     </div>
 
                     <ModalEditar v-if="tarefaEmEdicao" :tarefaEmEdicao="tarefaEmEdicao" @confirmar="editarTarefa"
                         @cancelar="cancelarEdicao" />
+                    <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefa"
+                        @cancelar="cancelarDelete" />
                 </div>
             </div>
 
@@ -74,6 +77,7 @@
 import { CheckCircle, XCircle, CircleEllipsis } from 'lucide-vue-next';
 import Metodos from '../../metodos/Metodos.js'
 import ModalEditar from '../../components/ModalEditar/ModalEditar.vue';
+import ModalDeletarTarefa from '../../components/ModalDeletarTarefa/ModalDeletarTarefa.vue';
 
 export default {
 
@@ -81,15 +85,15 @@ export default {
 
     components: {
         CheckCircle, XCircle, CircleEllipsis,
-        ModalEditar
+        ModalEditar,
+        ModalDeletarTarefa,
     },
 
     computed: {
         tarefasEmAndamento() {
             return this.tarefas.filter(tarefa => !tarefa.feito);
-        }
+        },
     },
-
 }
 </script>
 
@@ -273,15 +277,13 @@ hr {
     z-index: 999;
 }
 
-.modal h3 {
-    background-color: transparent;
-    color: #1f2937;
-}
-
 .modal-content {
-    background-color: #fff;
-    padding: 20px;
+     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    h2{
+        margin-top: 10px;
+    }
 }
 </style>

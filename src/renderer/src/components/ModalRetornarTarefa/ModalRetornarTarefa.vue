@@ -1,15 +1,12 @@
 <template>
-    <div v-show="tarefaEmEdicao" class="modalEditar">
-        <div class="modalContent">
-            <div class="tituloEditar">
-                <h1>Editar Tarefa</h1>
+    <div v-show="retornarTarefa" class="modalRetornar">
+        <div class="modalRetornarContent">
+            <div v-if="retornarTarefa" class="retornarTarefa">
+                <RotateCcw size="50" color="#f59e0b"/>
+                <h2>Você deseja marcar essa tarefa como não concluída?</h2>
+                <p>{{ retornarTarefa.texto }}</p>
             </div>
-            <div class="infoEditar">
-                <input v-model="tarefaEmEdicao.texto" placeholder="Título">
-                <input v-model="tarefaEmEdicao.data" type="date">
-                <textarea v-model="tarefaEmEdicao.descricao" placeholder="Descrição"></textarea>
-            </div>
-            <div class="confirmarEdicao">
+            <div class="confirmarRetorno">
                 <button class="botaoConfirmar" @click="$emit('confirmar')">Confirmar</button>
                 <button class="botaoCancelar" @click="$emit('cancelar')">Cancelar</button>
             </div>
@@ -19,29 +16,34 @@
 
 <script>
 
+import { RotateCcw } from 'lucide-vue-next'
+
 export default {
 
-    props: ['tarefaEmEdicao'],
+    props: ['retornarTarefa'],
 
-};
+    components: {
+        RotateCcw
+    }
+}
 
 </script>
 
 <style scoped lang="css">
-.modalEditar {
+.modalRetornar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 999;
 }
 
-.modalContent {
+.modalRetornarContent {
     background-color: #1f2937;
     padding: 20px;
     border-radius: 8px;
@@ -49,37 +51,19 @@ export default {
     width: 60%;
 }
 
-.tituloEditar{
-    margin-bottom: 20px;
-}
+.retornarTarefa {
+    padding-bottom: 20px;
 
-.infoEditar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: transparent;
-
-
-    input,
-    textarea {
+    h2 {
+        margin-top: 15px;
         margin-bottom: 15px;
-        background-color: transparent;
-        border: solid 1px #9da3ae;
-        border-radius: 8px;
-        padding: 10px;
-        color: #9da3ae;
     }
-
-    textarea {
-        height: 100px
-    }
-
-    ::-webkit-calendar-picker-indicator {
-        filter: invert(1);
+    p{
+      color: #9da3ae;
     }
 }
 
-.confirmarEdicao {
+.confirmarRetorno {
     background-color: transparent;
 
     button {

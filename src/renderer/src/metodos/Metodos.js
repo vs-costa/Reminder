@@ -5,9 +5,10 @@ export default {
     data() {
         return {
             tarefas: [],
-            tarefasConcluidas: [],
-            showModal: false,
+              showModal: false,
             tarefaEmEdicao: null,
+            deletarTarefa: null,
+            retornarTarefa: null,
             newTarefa: {
                 feito: false,
                 data: this.obterData(),
@@ -33,6 +34,7 @@ export default {
                 };
                 this.armazenarTarefas();
                 this.ordenarTarefasPorData();
+
             } else {
                 alert("O título e data da tarefa são obrigatórios")
             }
@@ -42,11 +44,11 @@ export default {
         },
         obterData() {
             const dataAtual = new Date();
-            const dia = String(dataAtual.getDate());
-            const mes = String(dataAtual.getMonth() + 1);
+            const dia = String(dataAtual.getDate()).padStart(2, '0');
+            const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
             const ano = dataAtual.getFullYear();
-
-            return `${dia}/${mes}/${ano}`;
+        
+            return `${ano}-${mes}-${dia}`;
         },
         formatarData(data) {
             const [ano, mes, dia] = data.split('-');
@@ -78,17 +80,20 @@ export default {
                 }, 1500);
             }
         },
-        confirmarRemocao(tarefa) {
-            if (confirm(`Você deseja remover a tarefa "${tarefa.texto}"?`)) {
-                this.removerTarefa(tarefa);
-            }
+        confirmarDeletar(tarefa) {
+            this.deletarTarefa = { ...tarefa };
         },
         removerTarefa(tarefa) {
-            const index = this.tarefas.indexOf(tarefa);
+            const index = this.tarefas.findIndex(t => t.id === this.deletarTarefa.id);
             if (index !== -1) {
                 this.tarefas.splice(index, 1);
                 this.armazenarTarefas();
             }
+            this.deletarTarefa = null
+            this.$forceUpdate();
+        },
+        cancelarDelete(){
+            this.deletarTarefa = null
         },
         toogleDescricao(id, lista) {
             const tarefa = lista.find(tarefa => tarefa.id === id);
@@ -118,7 +123,7 @@ export default {
                 this.tarefas[index] = tarefaAtualizada;
                 this.armazenarTarefas();
             }
-        }
+        },
     },
 
     created() {

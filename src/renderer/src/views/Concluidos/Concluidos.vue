@@ -17,7 +17,7 @@
                             <p>{{ formatarData(tarefa.data) }}</p>
                         </div>
                         <div>
-                            <RotateCcw @click="desmarcarTarefaConcluida(tarefa)" color="#f59e0b" cursor="pointer" />
+                            <RotateCcw @click="confirmarRetornar(tarefa)" color="#f59e0b" cursor="pointer" />
                         </div>
                     </div>
                     <div class="toogleDescricao">
@@ -33,6 +33,8 @@
                         Limpar Tarefas Concluídas
                     </button>
                 </div>
+                <ModalRetornarTarefa v-if="retornarTarefa" :retornarTarefa="retornarTarefa"
+                    @confirmar="desmarcarTarefaConcluida" @cancelar="cancelarRetorno" />
             </div>
         </div>
     </div>
@@ -40,13 +42,21 @@
   
 <script>
 import Metodos from '../../metodos/Metodos.js'
+import ModalRetornarTarefa from '../../components/ModalRetornarTarefa/ModalRetornarTarefa.vue'
 import { RotateCcw } from 'lucide-vue-next'
 
 export default {
     extends: Metodos,
 
     components: {
+        ModalRetornarTarefa,
         RotateCcw
+    },
+
+    computed: {
+        tarefasConcluidas() {
+            return this.tarefas.filter(tarefa => tarefa.feito);
+        }
     },
 
     methods: {
@@ -54,24 +64,28 @@ export default {
             this.tarefas = this.tarefas.filter(tarefa => !tarefa.feito)
             this.armazenarTarefas()
         },
-        desmarcarTarefaConcluida(tarefa) {
-            if (confirm('Você deseja marcar esta tarefa como não concluída?')) {
-                tarefa.feito = false
-                this.armazenarTarefas()
+        desmarcarTarefaConcluida() {
+            if (this.retornarTarefa) {
+                const index = this.tarefasConcluidas.findIndex(t => t.id === this.retornarTarefa.id);
+
+                if (index !== -1) {
+                    this.tarefasConcluidas[index].feito = false;
+                    this.armazenarTarefas();
+                }
+
+                this.retornarTarefa = null;
+                this.$forceUpdate();
             }
         },
-    },
-    computed: {
-        tarefasConcluidas() {
-            return this.tarefas.filter(tarefa => tarefa.feito)
-        }
-    },
-    created() {
-        this.tarefasConcluidas = localStorage.getItem('tarefasConcluidas')
-            ? JSON.parse(localStorage.getItem('tarefasConcluidas')).map(tarefa => ({ ...tarefa, mostrarDescricao: false }))
-            : this.tarefasConcluidas;
+        cancelarRetorno() {
+            this.retornarTarefa = null
+        },
+        confirmarRetornar(tarefa) {
+            this.retornarTarefa = { ...tarefa };
+        },
     },
 }
+
 </script>
   
 <style lang="css">

@@ -33,6 +33,7 @@
   width: 100%;
   text-align: center;
   background-color: #111a23;
+  z-index: 998;
 
   a {
     color: #F5E8C7;
@@ -55,6 +56,7 @@
   text-align: center;
   background-color: #111a23;
   color: #f59e0b;
+  z-index: 998;
 
 }
 
