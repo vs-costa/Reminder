@@ -9,6 +9,8 @@ export default {
             tarefaEmEdicao: null,
             deletarTarefa: null,
             retornarTarefa: null,
+            exibirModalErro: false,
+            exibirModalPreenchimento: false,
             newTarefa: {
                 feito: false,
                 data: this.obterData(),
@@ -21,22 +23,26 @@ export default {
     methods: {
         adicionarTarefa() {
             if (this.newTarefa.texto && this.newTarefa.data) {
-                let textoTarefa = this.newTarefa.texto;
-                if (textoTarefa.length > 50) {
-                    textoTarefa = textoTarefa.substring(0, 50);
+                let textoTarefa = this.newTarefa.texto.trim();
+                if (textoTarefa.length > 0) {
+                    if (textoTarefa.length > 50) {
+                        textoTarefa = textoTarefa.substring(0, 50);
+                    }
+                    this.tarefas.push({ ...this.newTarefa, texto: textoTarefa, id: uuidv4() });
+                    this.newTarefa = {
+                        feito: false,
+                        data: this.obterData(),
+                        descricao: "",
+                        texto: "",
+                    };
+                    this.armazenarTarefas();
+                    this.ordenarTarefasPorData();
+                    this.toogleModal();
+                } else {
+                    this.exibirModalErro = true;
                 }
-                this.tarefas.push({ ...this.newTarefa, texto: textoTarefa, id: uuidv4() });
-                this.newTarefa = {
-                    feito: false,
-                    data: this.obterData(),
-                    descricao: "",
-                    texto: "",
-                };
-                this.armazenarTarefas();
-                this.ordenarTarefasPorData();
-                this.toogleModal();
             } else {
-                alert("O título e data da tarefa são obrigatórios")
+                this.exibirModalPreenchimento = true;
             }
         },
         armazenarTarefas() {
@@ -123,6 +129,12 @@ export default {
                 this.tarefas[index] = tarefaAtualizada;
                 this.armazenarTarefas();
             }
+        },
+        fecharModalErro() {
+            this.exibirModalErro = false;
+        },
+        fecharModalPreenchimento() {
+            this.exibirModalPreenchimento = false;
         },
     },
 

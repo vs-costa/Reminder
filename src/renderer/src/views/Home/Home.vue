@@ -44,7 +44,7 @@
 
                     <div class="modal" v-if="showModal">
                         <div class="modal-content">
-                            <CheckCircle size="50" color="#54ba91"/>
+                            <CheckCircle size="50" color="#54ba91" />
                             <h2>Tarefa concluída!</h2>
                         </div>
                     </div>
@@ -68,6 +68,9 @@
                     tudo</button> -->
             </div>
 
+            <ModalAlertaErroTitulo v-show="exibirModalErro" @cancelar="fecharModalErro" />
+            <ModalAlertaPreenchimento v-show="exibirModalPreenchimento" @cancelar="fecharModalPreenchimento" />
+
         </div>
     </div>
 </template>
@@ -78,6 +81,8 @@ import { CheckCircle, XCircle, CircleEllipsis } from 'lucide-vue-next';
 import Metodos from '../../metodos/Metodos.js'
 import ModalEditar from '../../components/ModalEditar/ModalEditar.vue';
 import ModalDeletarTarefa from '../../components/ModalDeletarTarefa/ModalDeletarTarefa.vue';
+import ModalAlertaErroTitulo from '../../components/ModalAlertaErroTitulo/ModalAlertaErroTitulo.vue';
+import ModalAlertaPreenchimento from '../../components/ModalAlertaPreenchimento/ModalAlertaPreenchimento.vue';
 
 export default {
 
@@ -87,6 +92,8 @@ export default {
         CheckCircle, XCircle, CircleEllipsis,
         ModalEditar,
         ModalDeletarTarefa,
+        ModalAlertaErroTitulo,
+        ModalAlertaPreenchimento,
     },
 
     computed: {
@@ -278,11 +285,11 @@ hr {
 }
 
 .modal-content {
-     padding: 20px;
+    padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
-    h2{
+    h2 {
         margin-top: 10px;
     }
 }
