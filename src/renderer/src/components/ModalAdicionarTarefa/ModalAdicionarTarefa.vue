@@ -1,0 +1,149 @@
+<template>
+    <div v-if="showModal" class="adicionarContent">
+        <div class="adicionarContainer">
+
+            <h2>Adicionar Tarefa</h2>
+
+            <p><strong>Data: </strong>{{ formatarData(newTarefa.data) }}</p>
+            <input type="text" placeholder="Nova tarefa..." v-model="newTarefa.texto">
+            <textarea placeholder="Descrição da tarefa..." v-model="newTarefa.descricao"></textarea>
+
+            <button class="adicionar" @click="adicionarTarefa">Adicionar</button>
+            <button @click="toogleModal" class="botaoFechar">Fechar</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+import Metodos from '../../metodos/Metodos';
+
+export default {
+
+    extends: Metodos,
+
+    props: ['showModal', 'selectedDate'],
+
+    watch: {
+        selectedDate(newValue) {
+            this.newTarefa.data = newValue;
+        },
+    },
+
+    methods: {
+        toogleModal() {
+            this.showModal = false;
+            this.$emit('close-modal');
+        },
+    },
+}
+
+</script>
+
+<style scoped lang="css">
+.adicionarContent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+p {
+    margin-top: 20px;
+    color: #9da3ae;
+}
+.adicionarContainer {
+
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 8px;
+
+    button {
+        margin-top: 20px;
+        background-color: transparent;
+        cursor: pointer;
+        box-sizing: border-box;
+        height: 28px;
+        border-radius: .25rem;
+        color: #F5E8C7;
+    }
+
+
+    input {
+        box-sizing: border-box;
+        height: 28px;
+        border-radius: .25rem;
+        width: 100%;
+        border: 1px solid #9da3ae;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #9da3ae;
+        padding: 10px;
+
+        placeholder {
+            color: #9da3ae;
+        }
+    }
+
+    textarea {
+        box-sizing: border-box;
+        height: 100px;
+        border-radius: .25rem;
+        width: 100%;
+        border: 1px solid #9da3ae;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        color: #9da3ae;
+        padding: 10px;
+    }
+
+    input[type="text"]::placeholder {
+        color: #9da3ae;
+    }
+
+    input[type="date"]::placeholder {
+        color: #9da3ae;
+    }
+
+    textarea::placeholder {
+        color: #9da3ae;
+    }
+
+    ::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+}
+
+.adicionar {
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    margin-left: 2px;
+    width: 100%;
+    margin-bottom: 15px;
+
+    &:hover {
+        background-color: #007bff;
+        color: #fff;
+        opacity: 0.8;
+    }
+}
+
+.botaoFechar {
+    background-color: transparent;
+    border: 1px solid #dc3545;
+
+    &:hover {
+        background-color: #dc3545;
+        color: #fff;
+        opacity: 0.8;
+    }
+}
+</style>

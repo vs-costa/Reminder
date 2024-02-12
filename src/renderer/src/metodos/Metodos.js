@@ -5,7 +5,7 @@ export default {
     data() {
         return {
             tarefas: [],
-              showModal: false,
+            showModal: false,
             tarefaEmEdicao: null,
             deletarTarefa: null,
             retornarTarefa: null,
@@ -34,7 +34,7 @@ export default {
                 };
                 this.armazenarTarefas();
                 this.ordenarTarefasPorData();
-
+                this.toogleModal();
             } else {
                 alert("O título e data da tarefa são obrigatórios")
             }
@@ -47,7 +47,7 @@ export default {
             const dia = String(dataAtual.getDate()).padStart(2, '0');
             const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
             const ano = dataAtual.getFullYear();
-        
+
             return `${ano}-${mes}-${dia}`;
         },
         formatarData(data) {
@@ -91,8 +91,10 @@ export default {
             }
             this.deletarTarefa = null
             this.$forceUpdate();
+            this.$refs.fullCalendar.getApi().refetchEvents();
+            this.toogleModal()
         },
-        cancelarDelete(){
+        cancelarDelete() {
             this.deletarTarefa = null
         },
         toogleDescricao(id, lista) {

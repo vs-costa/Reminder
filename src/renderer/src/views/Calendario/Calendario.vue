@@ -10,7 +10,10 @@
         <div class="calendarioContainer">
             <FullCalendar ref="fullCalendar" :options="calendarOptions" />
             <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModal="tarefaEmVisualizacao != null"
-                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null" />
+                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null"/>
+            <ModalAdicionarTarefa :showModal="showModalAdicionarTarefa" :newTarefa="newTarefa" :selectedDate="selectedDate"
+                @close-modal="showModalAdicionarTarefa = false" />
+
         </div>
     </div>
 </template>
@@ -19,19 +22,19 @@
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import Metodos from '../../metodos/Metodos';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
+import Metodos from '../../metodos/Metodos';
 import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vue';
+import ModalAdicionarTarefa from '../../components/ModalAdicionarTarefa/ModalAdicionarTarefa.vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 export default {
     extends: Metodos,
 
-
-
     components: {
         FullCalendar,
         ModalCalendario,
+        ModalAdicionarTarefa,
         ChevronRight,
         ChevronLeft,
     },
@@ -39,11 +42,10 @@ export default {
     data() {
         return {
             tarefaEmVisualizacao: null,
+            showModalAdicionarTarefa: false,
+            selectedDate: null,
         };
     },
-
-
-
 
     computed: {
         tarefasEmAndamento() {
@@ -68,6 +70,7 @@ export default {
                 weekends: true,
                 locale: ptBrLocale,
                 events: this.tarefasEmAndamento,
+                dateClick: this.handleDateClick,
                 eventClick: this.mostrarDescricao,
                 eventMouseEnter: this.mudarCursorParaPointer,
                 eventMouseLeave: this.mudarCursorParaPadrao,
@@ -102,6 +105,19 @@ export default {
         },
         goToNext() {
             this.$refs.fullCalendar.getApi().next();
+        },
+        handleDateClick(clickInfo) {
+            const date = clickInfo.dateStr;
+            this.selectedDate = date;
+            this.showModalAdicionarTarefa = true;
+        },
+        atualizarCalendario() {
+            let calendarApi = this.$refs.fullCalendar.getApi();
+            calendarApi.refetchEvents();
+        },
+        toogleModal() {
+            this.showModalAdicionarTarefa = false;
+            this.atualizarCalendario();
         },
     },
 
@@ -138,9 +154,8 @@ h1 {
     border-radius: 5px;
 }
 
-.prev:hover, .next:hover{
+.prev:hover,
+.next:hover {
     background-color: #1A252F;
 }
-
 </style>
-  

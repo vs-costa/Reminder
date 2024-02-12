@@ -26,9 +26,8 @@ export default {
 
     components: {
         AlertCircle
-    }
+    },
 }
-
 
 </script>
 

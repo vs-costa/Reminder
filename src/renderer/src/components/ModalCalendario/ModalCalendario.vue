@@ -30,21 +30,31 @@
                     </label>
                 </div>
                 <div class="layoutBotao">
+                    <!-- botão salvar e editar -->
                     <button v-if="editMode" @click="salvarEdicao" class="salvarEdicao">Salvar</button>
                     <button v-else @click="ativarModoEdicao" class="botaoEditar">Editar</button>
+                    <!-- botão deletar -->
+                    <button v-if="!editMode" @click="confirmarDeletar(tarefa)" class="botaoExcluir">Excluir</button>
+                    <!-- botão fechar -->
                     <button v-if="editMode" @click="toogleEditMode" class="botaoFechar">Fechar</button>
                     <button v-else @click="toogleModal" class="botaoFechar">Fechar</button>
                 </div>
+                <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefa"
+                    @cancelar="cancelarDelete" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
 import Metodos from '../../metodos/Metodos';
+import ModalDeletarTarefa from '../ModalDeletarTarefa/ModalDeletarTarefa.vue';
 
 export default {
     extends: Metodos,
+
+    components: { ModalDeletarTarefa },
 
     props: ['tarefa', 'showModal'],
 
@@ -113,12 +123,15 @@ export default {
     color: #9da3ae;
     margin-bottom: 15px;
 }
+
 .modalCalendarioContent input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
 }
+
 .modalCalendarioContent textarea {
     height: 100px;
 }
+
 .modalCalendarioContent button {
     max-width: 50%;
     color: #F5E8C7;
@@ -129,27 +142,52 @@ export default {
     margin-left: 10px;
 }
 
-.salvarEdicao,
-.botaoEditar {
+.salvarEdicao {
     background-color: transparent;
-    border: 1px solid #007bff;
+    border: 1px solid #54ba91;
+
+    &:hover {
+        background-color: #54ba91;
+        color: #fff;
+        opacity: 0.8;
+    }
 }
 
-.salvarEdicao:hover,
-.botaoEditar:hover {
-    background-color: #0056b3;
+.botaoEditar {
+    background-color: transparent;
+    border: 1px solid #f59e0b;
+
+    &:hover {
+        background-color: #f59e0b;
+        color: #fff;
+        opacity: 0.8;
+    }
+}
+
+.botaoExcluir {
+    background-color: transparent;
+    border: 1px solid #dc3545;
+
+    &:hover {
+        background-color: #dc3545;
+        color: #fff;
+        opacity: 0.8;
+    }
 }
 
 .botaoFechar {
     background-color: transparent;
-    border: 1px solid #dc3545;
-}
+    border: 1px solid #007bff;
 
-.botaoFechar:hover {
-    background-color: #dc3545;
+    &:hover {
+        background-color: #007bff;
+        color: #fff;
+        opacity: 0.8;
+    }
 }
 
 .layoutBotao {
     background-color: transparent;
+    margin-top: 20px;
 }
 </style>
