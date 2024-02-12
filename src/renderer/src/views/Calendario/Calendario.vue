@@ -9,10 +9,15 @@
         </div>
         <div class="calendarioContainer">
             <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+            <!-- Modal abre ao clicar em uma tarefa já cadastrada no calendário -->
             <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModal="tarefaEmVisualizacao != null"
-                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null"/>
+                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null" @deletar-calendario="confirmarDeletarCalendario" />
+            <!-- Modal abre ao clicar em uma data qualquer no calendário -->
             <ModalAdicionarTarefa :showModal="showModalAdicionarTarefa" :newTarefa="newTarefa" :selectedDate="selectedDate"
                 @close-modal="showModalAdicionarTarefa = false" />
+            <!-- Modal abre ao clicar no botão Excluir dentro do ModalCalendario -->
+            <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefaCalendario"
+                @cancelar="cancelarDelete" />
 
         </div>
     </div>
@@ -26,6 +31,7 @@ import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import Metodos from '../../metodos/Metodos';
 import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vue';
 import ModalAdicionarTarefa from '../../components/ModalAdicionarTarefa/ModalAdicionarTarefa.vue';
+import ModalDeletarTarefa from '../../components/ModalDeletarTarefa/ModalDeletarTarefa.vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 export default {
@@ -35,6 +41,7 @@ export default {
         FullCalendar,
         ModalCalendario,
         ModalAdicionarTarefa,
+        ModalDeletarTarefa,
         ChevronRight,
         ChevronLeft,
     },
@@ -115,9 +122,23 @@ export default {
             let calendarApi = this.$refs.fullCalendar.getApi();
             calendarApi.refetchEvents();
         },
-        toogleModal() {
+        toogleModalAdicionarTarefa() {
             this.showModalAdicionarTarefa = false;
             this.atualizarCalendario();
+        },
+        confirmarDeletarCalendario(tarefa) {
+            this.deletarTarefa = { ...tarefa };
+        },
+        removerTarefaCalendario(tarefa) {
+            const index = this.tarefas.findIndex(t => t.id === this.deletarTarefa.id);
+            if (index !== -1) {
+                this.tarefas.splice(index, 1);
+                this.armazenarTarefas();
+            }
+            this.deletarTarefa = null
+            this.$forceUpdate();
+            this.$refs.fullCalendar.getApi().refetchEvents();
+            this.tarefaEmVisualizacao = null;
         },
     },
 

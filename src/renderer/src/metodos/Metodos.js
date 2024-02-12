@@ -91,8 +91,6 @@ export default {
             }
             this.deletarTarefa = null
             this.$forceUpdate();
-            this.$refs.fullCalendar.getApi().refetchEvents();
-            this.toogleModal()
         },
         cancelarDelete() {
             this.deletarTarefa = null

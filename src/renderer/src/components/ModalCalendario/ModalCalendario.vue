@@ -34,13 +34,12 @@
                     <button v-if="editMode" @click="salvarEdicao" class="salvarEdicao">Salvar</button>
                     <button v-else @click="ativarModoEdicao" class="botaoEditar">Editar</button>
                     <!-- botão deletar -->
-                    <button v-if="!editMode" @click="confirmarDeletar(tarefa)" class="botaoExcluir">Excluir</button>
+                    <button v-if="!editMode" @click="confirmarDeletarCalendario(tarefa)"
+                        class="botaoExcluir">Excluir</button>
                     <!-- botão fechar -->
                     <button v-if="editMode" @click="toogleEditMode" class="botaoFechar">Fechar</button>
                     <button v-else @click="toogleModal" class="botaoFechar">Fechar</button>
                 </div>
-                <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefa"
-                    @cancelar="cancelarDelete" />
             </div>
         </div>
     </div>
@@ -49,14 +48,13 @@
 <script>
 
 import Metodos from '../../metodos/Metodos';
-import ModalDeletarTarefa from '../ModalDeletarTarefa/ModalDeletarTarefa.vue';
 
 export default {
     extends: Metodos,
 
-    components: { ModalDeletarTarefa },
-
-    props: ['tarefa', 'showModal'],
+    props: ['tarefa',
+        'showModal'
+    ],
 
     data() {
         return {
@@ -70,18 +68,18 @@ export default {
         },
         toogleEditMode() {
             this.editMode = !this.editMode;
-            if (!this.editMode) {
-                this.toogleModal();
-            }
         },
         salvarEdicao() {
             this.editMode = false;
             this.$emit('update-tarefa', this.tarefa);
         },
         toogleModal() {
-            this.editMode = false;
+            this.modalTarefa = false;
             this.$emit('close-modal');
         },
+        confirmarDeletarCalendario(tarefa) {
+            this.$emit('deletar-calendario', tarefa)
+        }
     },
 }
 </script>
