@@ -29,12 +29,14 @@
                     <hr>
                 </div>
                 <div class="botaoLimparContainer">
-                    <button class="limparTarefas" @click="limparTarefasConcluidas" v-if="tarefasConcluidas.length">
+                    <button class="limparTarefas" @click="confirmarLimparTarefa" v-if="tarefasConcluidas.length">
                         Limpar Tarefas Concluídas
                     </button>
                 </div>
                 <ModalRetornarTarefa v-if="retornarTarefa" :retornarTarefa="retornarTarefa"
                     @confirmar="desmarcarTarefaConcluida" @cancelar="cancelarRetorno" />
+                <ModalLimparTarefasConcluidas v-if="limparTarefa" :limparTarefa="limparTarefa"
+                    @limpar="limparTarefasConcluidas" @cancelar="cancelarLimpar" />
             </div>
         </div>
     </div>
@@ -43,6 +45,7 @@
 <script>
 import Metodos from '../../metodos/Metodos.js'
 import ModalRetornarTarefa from '../../components/ModalRetornarTarefa/ModalRetornarTarefa.vue'
+import ModalLimparTarefasConcluidas from '../../components/ModalLimparTarefasConcluidas/ModalLimparTarefasConcluidas.vue'
 import { RotateCcw } from 'lucide-vue-next'
 
 export default {
@@ -50,7 +53,14 @@ export default {
 
     components: {
         ModalRetornarTarefa,
+        ModalLimparTarefasConcluidas,
         RotateCcw
+    },
+
+    data() {
+        return {
+            limparTarefa: null
+        }
     },
 
     computed: {
@@ -60,9 +70,16 @@ export default {
     },
 
     methods: {
+        confirmarLimparTarefa() {
+            this.limparTarefa = true;
+        },
         limparTarefasConcluidas() {
-            this.tarefas = this.tarefas.filter(tarefa => !tarefa.feito)
-            this.armazenarTarefas()
+            this.tarefas = this.tarefas.filter(tarefa => !tarefa.feito);
+            this.armazenarTarefas();
+            this.limparTarefa = false;
+        },
+        cancelarLimpar() {
+            this.limparTarefa = false;
         },
         desmarcarTarefaConcluida() {
             if (this.retornarTarefa) {

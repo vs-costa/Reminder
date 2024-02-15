@@ -116,7 +116,7 @@
                     tudo</button> -->
             </div>
 
-            <ModalTarefaConcluida v-if="modalConcluir" :modalConcluir="modalConcluir != null" />
+            <ModalTarefaConcluida v-if="modalConcluir" :modalConcluir="modalConcluir != null" @fechar="modalConcluir = false"/>
             <ModalAlertaErroTitulo :alertaErroTitulo="exibirModalErro" @cancelar="fecharModalErro" />
             <ModalAlertaPreenchimento :alertaPreenchimento="exibirModalPreenchimento"
                 @cancelar="fecharModalPreenchimento" />

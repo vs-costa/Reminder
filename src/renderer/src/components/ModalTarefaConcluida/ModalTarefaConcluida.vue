@@ -1,5 +1,5 @@
 <template>
-    <div class="modal" v-if="modalConcluir">
+    <div class="modal" v-if="modalConcluir" @click="fecharModal">
         <div class="modal-content">
             <CheckCircle size="50" color="#54ba91" />
             <h2>Tarefa concluída!</h2>
@@ -17,6 +17,12 @@ export default {
 
     components: {
         CheckCircle,
+    },
+
+    methods:{
+        fecharModal(){
+            this.$emit('fechar');
+        }
     },
 }
 </script>
