@@ -10,14 +10,21 @@
         <div class="calendarioContainer">
             <FullCalendar ref="fullCalendar" :options="calendarOptions" />
             <!-- Modal abre ao clicar em uma tarefa já cadastrada no calendário -->
-            <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModal="tarefaEmVisualizacao != null"
-                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null" @deletar-calendario="confirmarDeletarCalendario" />
+            <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModalCalendario="tarefaEmVisualizacao != null"
+                @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null"
+                @deletar-calendario="confirmarDeletarCalendario" @concluir-calendario="concluirTarefaCalendario" />
             <!-- Modal abre ao clicar em uma data qualquer no calendário -->
-            <ModalAdicionarTarefa :showModal="showModalAdicionarTarefa" :newTarefa="newTarefa" :selectedDate="selectedDate"
-                @close-modal="showModalAdicionarTarefa = false" />
+            <ModalAdicionarTarefa :showModalAdicionar="showModalAdicionarTarefa" :newTarefa="newTarefa" :selectedDate="selectedDate"
+                @close-modal="showModalAdicionarTarefa = false" @adicionar-tarefa="adicionarTarefaCalendario" />
+            <!-- Modal de erro ao adicionar tarefa -->
+            <ModalAlertaErroTitulo :alertaErroTitulo="exibirModalErro" @cancelar="fecharModalErro" />
+            <ModalAlertaPreenchimento :alertaPreenchimento="exibirModalPreenchimento"
+                @cancelar="fecharModalPreenchimento" />
             <!-- Modal abre ao clicar no botão Excluir dentro do ModalCalendario -->
             <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefaCalendario"
                 @cancelar="cancelarDelete" />
+            <!-- Modal aparece ao concluir uma tarefa -->
+            <ModalTarefaConcluida v-if="modalConcluir" :modalConcluir="modalConcluir != null"/>
 
         </div>
     </div>
@@ -29,28 +36,35 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import ptBrLocale from '@fullcalendar/core/locales/pt-br';
 import Metodos from '../../metodos/Metodos';
+import { v4 as uuidv4 } from 'uuid';
 import ModalCalendario from '../../components/ModalCalendario/ModalCalendario.vue';
 import ModalAdicionarTarefa from '../../components/ModalAdicionarTarefa/ModalAdicionarTarefa.vue';
 import ModalDeletarTarefa from '../../components/ModalDeletarTarefa/ModalDeletarTarefa.vue';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import ModalAlertaErroTitulo from '../../components/ModalAlertaErroTitulo/ModalAlertaErroTitulo.vue';
+import ModalAlertaPreenchimento from '../../components/ModalAlertaPreenchimento/ModalAlertaPreenchimento.vue';
+import ModalTarefaConcluida from '../../components/ModalTarefaConcluida/ModalTarefaConcluida.vue';
+import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-vue-next';
 
 export default {
     extends: Metodos,
 
     components: {
+        ChevronRight, ChevronLeft, CheckCircle,
         FullCalendar,
         ModalCalendario,
         ModalAdicionarTarefa,
         ModalDeletarTarefa,
-        ChevronRight,
-        ChevronLeft,
+        ModalAlertaErroTitulo,
+        ModalAlertaPreenchimento,
+        ModalTarefaConcluida
     },
 
     data() {
         return {
             tarefaEmVisualizacao: null,
-            showModalAdicionarTarefa: false,
+            showModalAdicionarTarefa: null,
             selectedDate: null,
+            modalConcluir: null,
         };
     },
 
@@ -118,13 +132,8 @@ export default {
             this.selectedDate = date;
             this.showModalAdicionarTarefa = true;
         },
-        atualizarCalendario() {
-            let calendarApi = this.$refs.fullCalendar.getApi();
-            calendarApi.refetchEvents();
-        },
         toogleModalAdicionarTarefa() {
             this.showModalAdicionarTarefa = false;
-            this.atualizarCalendario();
         },
         confirmarDeletarCalendario(tarefa) {
             this.deletarTarefa = { ...tarefa };
@@ -137,8 +146,55 @@ export default {
             }
             this.deletarTarefa = null
             this.$forceUpdate();
-            this.$refs.fullCalendar.getApi().refetchEvents();
+            this.atualizarCalendario();
             this.tarefaEmVisualizacao = null;
+        },
+        atualizarTarefaNoCalendario(tarefaAtualizada) {
+            const index = this.tarefas.findIndex(tarefa => tarefa.id === tarefaAtualizada.id);
+            if (index !== -1) {
+                this.tarefas[index] = tarefaAtualizada;
+                this.armazenarTarefas();
+                this.tarefaEmVisualizacao = null;
+            }
+        },
+        atualizarCalendario() {
+            this.$refs.fullCalendar.getApi().refetchEvents();
+        },
+        adicionarTarefaCalendario(newTarefa) {
+            if (newTarefa.texto && newTarefa.data) {
+                let textoTarefa = newTarefa.texto.trim();
+                if (textoTarefa.length > 0) {
+                    if (textoTarefa.length > 50) {
+                        textoTarefa = textoTarefa.substring(0, 50);
+                    }
+                    this.tarefas.push({ ...newTarefa, texto: textoTarefa, id: uuidv4() });
+                    this.newTarefa = {
+                        feito: false,
+                        data: this.obterData(),
+                        descricao: "",
+                        texto: "",
+                    };
+                    this.armazenarTarefas();
+                    this.atualizarCalendario();
+                    this.showModalAdicionarTarefa = false;
+                } else {
+                    this.exibirModalErro = true;
+                }
+            } else {
+                this.exibirModalPreenchimento = true;
+            }
+        },
+        concluirTarefaCalendario(tarefa) {
+            if (!tarefa.feito) {
+                tarefa.feito = true;
+                this.armazenarTarefas();
+                this.tarefaEmVisualizacao = null;
+                this.atualizarCalendario();
+                this.modalConcluir = true;
+                setTimeout(() => {
+                    this.modalConcluir = false;
+                }, 1500);
+            }
         },
     },
 

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="showModal" class="adicionarContent">
+    <div v-show="showModalAdicionar" class="adicionarContent">
         <div class="adicionarContainer">
 
             <h2>Adicionar Tarefa</h2>
@@ -8,8 +8,8 @@
             <input type="text" placeholder="Nova tarefa..." v-model="newTarefa.texto">
             <textarea placeholder="Descrição da tarefa..." v-model="newTarefa.descricao"></textarea>
 
-            <button class="adicionar" @click="adicionarTarefa">Adicionar</button>
-            <button @click="toogleModal" class="botaoFechar">Fechar</button>
+            <button class="adicionar" @click="adicionaTarefaCalendario(newTarefa)">Adicionar</button>
+            <button @click="$emit('close-modal')" class="botaoFechar">Fechar</button>
         </div>
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
 
     extends: Metodos,
 
-    props: ['showModal', 'selectedDate'],
+    props: ['showModalAdicionar', 'selectedDate'],
 
     watch: {
         selectedDate(newValue) {
@@ -31,10 +31,9 @@ export default {
     },
 
     methods: {
-        toogleModal() {
-            this.showModal = false;
-            this.$emit('close-modal');
-        },
+        adicionaTarefaCalendario(){
+            this.$emit('adicionar-tarefa', this.newTarefa)
+        }
     },
 }
 

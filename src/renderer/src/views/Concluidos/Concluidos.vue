@@ -88,7 +88,7 @@ export default {
 
 </script>
   
-<style lang="css">
+<style scoped lang="css">
 .concluidoContent {
     display: flex;
     justify-content: center;
@@ -138,6 +138,20 @@ export default {
 hr {
     border-color: #F5E8C7;
     margin-top: 15px;
+}
+
+.toogleDescricao {
+    text-align: justify;
+    margin-top: 15px;
+
+    p {
+        padding: 8px;
+    }
+
+    h4 {
+        padding: 8px;
+        color: #9da3ae;
+    }
 }
 
 .botaoLimparContainer {

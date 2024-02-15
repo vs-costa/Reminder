@@ -5,17 +5,19 @@ export default {
     data() {
         return {
             tarefas: [],
-            showModal: false,
             tarefaEmEdicao: null,
             deletarTarefa: null,
+            modalConcluir: null,
             retornarTarefa: null,
             exibirModalErro: false,
             exibirModalPreenchimento: false,
+            mostrarLegenda: true,
             newTarefa: {
                 feito: false,
                 data: this.obterData(),
                 descricao: '',
                 texto: '',
+                prioridade: 'Normal',
                 mostrarDescricao: false
             },
         }
@@ -34,10 +36,10 @@ export default {
                         data: this.obterData(),
                         descricao: "",
                         texto: "",
+                        prioridade: 'Normal',
                     };
                     this.armazenarTarefas();
                     this.ordenarTarefasPorData();
-                    this.toogleModal();
                 } else {
                     this.exibirModalErro = true;
                 }
@@ -65,8 +67,21 @@ export default {
 
                 const dataA = new Date(a.data);
                 const dataB = new Date(b.data);
+                const comparacaoData = dataA - dataB;
 
-                return dataA - dataB;
+                if (comparacaoData === 0) {
+                    const prioridadeOrdem = {
+                        'Normal': 2,
+                        'Média': 1,
+                        'Alta': 0,
+                    };
+                    const prioridadeA = prioridadeOrdem[a.prioridade];
+                    const prioridadeB = prioridadeOrdem[b.prioridade];
+
+                    return prioridadeA - prioridadeB;
+                }
+
+                return comparacaoData;
             });
         },
         isDataPassada(data) {
@@ -80,9 +95,9 @@ export default {
             if (!tarefa.feito) {
                 tarefa.feito = true;
                 this.armazenarTarefas();
-                this.showModal = true;
+                this.modalConcluir = true;
                 setTimeout(() => {
-                    this.showModal = false;
+                    this.modalConcluir = false;
                 }, 1500);
             }
         },
@@ -123,23 +138,28 @@ export default {
         cancelarEdicao() {
             this.tarefaEmEdicao = null;
         },
-        atualizarTarefaNoCalendario(tarefaAtualizada) {
-            const index = this.tarefas.findIndex(tarefa => tarefa.id === tarefaAtualizada.id);
-            if (index !== -1) {
-                this.tarefas[index] = tarefaAtualizada;
-                this.armazenarTarefas();
-            }
-        },
         fecharModalErro() {
             this.exibirModalErro = false;
         },
         fecharModalPreenchimento() {
             this.exibirModalPreenchimento = false;
         },
+        alternarLegenda() {
+            this.mostrarLegenda = !this.mostrarLegenda;
+            localStorage.setItem('mostrarLegenda', JSON.stringify(this.mostrarLegenda));
+        },
     },
 
     created() {
         this.tarefas = localStorage.getItem("tarefas") ? JSON.parse(localStorage.getItem("tarefas")) : this.tarefas;
         this.ordenarTarefasPorData();
+    },
+    mounted() {
+        const mostrarLegendaSalva = localStorage.getItem('mostrarLegenda');
+        if (mostrarLegendaSalva !== null) {
+            this.mostrarLegenda = JSON.parse(mostrarLegendaSalva);
+        } else {
+            this.mostrarLegenda = true;
+        }
     },
 }

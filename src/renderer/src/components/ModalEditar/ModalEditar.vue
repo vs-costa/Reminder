@@ -5,6 +5,14 @@
                 <h1>Editar Tarefa</h1>
             </div>
             <div class="infoEditar">
+                <div class="prioridadeDropdown">
+                    <label for="prioridade">Prioridade:</label>
+                    <select v-model="tarefaEmEdicao.prioridade">
+                        <option value="Normal">Normal</option>
+                        <option value="Média">Média</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
                 <input v-model="tarefaEmEdicao.texto" placeholder="Título">
                 <input v-model="tarefaEmEdicao.data" type="date">
                 <textarea v-model="tarefaEmEdicao.descricao" placeholder="Descrição"></textarea>
@@ -49,7 +57,7 @@ export default {
     width: 60%;
 }
 
-.tituloEditar{
+.tituloEditar {
     margin-bottom: 20px;
 }
 
@@ -108,6 +116,32 @@ export default {
 
         &:hover {
             background-color: #dc3545;
+        }
+    }
+}
+
+.prioridadeDropdown {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+
+    label {
+        margin-right: 10px;
+        color: #9da3ae;
+    }
+
+    select {
+        box-sizing: border-box;
+        height: 28px;
+        border-radius: .25rem;
+        border: 1px solid #9da3ae;
+        color: #9da3ae;
+        padding: 5px;
+
+        option {
+            background-color: #2d3648;
+            /* Cor de fundo do dropdown */
+            color: #9da3ae;
         }
     }
 }

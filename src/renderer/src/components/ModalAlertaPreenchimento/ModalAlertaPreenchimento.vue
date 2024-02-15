@@ -18,6 +18,8 @@ import { AlertTriangle } from 'lucide-vue-next';
 
 export default {
 
+    props: ['alertaPreenchimento'],
+
     components: { AlertTriangle },
 
 }

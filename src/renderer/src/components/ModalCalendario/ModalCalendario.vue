@@ -1,6 +1,6 @@
 <template>
     <div v-if="tarefa">
-        <div v-if="showModal" class="modalCalendario">
+        <div v-if="showModalCalendario" class="modalCalendario">
             <div class="modalCalendarioContent">
                 <div>
                     <label>
@@ -30,6 +30,9 @@
                     </label>
                 </div>
                 <div class="layoutBotao">
+                    <!-- Botão para concluir tarefa -->
+                    <button v-if="!editMode" @click="concluirTarefaCalendario(tarefa)"
+                        class="botaoConcluir">Concluir</button>
                     <!-- botão salvar e editar -->
                     <button v-if="editMode" @click="salvarEdicao" class="salvarEdicao">Salvar</button>
                     <button v-else @click="ativarModoEdicao" class="botaoEditar">Editar</button>
@@ -53,7 +56,7 @@ export default {
     extends: Metodos,
 
     props: ['tarefa',
-        'showModal'
+        'showModalCalendario'
     ],
 
     data() {
@@ -79,7 +82,10 @@ export default {
         },
         confirmarDeletarCalendario(tarefa) {
             this.$emit('deletar-calendario', tarefa)
-        }
+        },
+        concluirTarefaCalendario(tarefa){
+            this.$emit('concluir-calendario', tarefa)
+        },
     },
 }
 </script>
@@ -140,7 +146,7 @@ export default {
     margin-left: 10px;
 }
 
-.salvarEdicao {
+.botaoConcluir, .salvarEdicao {
     background-color: transparent;
     border: 1px solid #54ba91;
 
