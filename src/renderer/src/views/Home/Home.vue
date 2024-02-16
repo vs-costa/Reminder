@@ -47,6 +47,7 @@
                 </div>
 
             <div class="orientação" v-if="tarefasEmAndamento.length > 0">
+                <p>Data em vermelho significa que a tarefa está atrasada.</p>
                 <p>Para visualizar a descrição da tarefa, clique sobre o título da tarefa.</p>
             </div>
 

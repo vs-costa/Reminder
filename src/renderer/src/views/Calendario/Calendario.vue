@@ -1,21 +1,29 @@
 <template>
     <div>
-        <div>
+        <div class="calendarioTitulo">
             <h1>Calendário</h1>
         </div>
+
+        <div class="orientações" @click="toggleModalOrientacoes">
+            <p>Clique aqui para abrir as orientações.</p>
+        </div>
+
         <div class="prevNext">
             <ChevronLeft class="prev" @click="goToPrev" />
             <ChevronRight class="next" @click="goToNext" />
         </div>
         <div class="calendarioContainer">
             <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+            <!-- Modal com Orientações -->
+            <ModalOrientacoes :modalOrientacao="showModalOrientacoes" @fechar="fecharModalOrientacoes" />
             <!-- Modal abre ao clicar em uma tarefa já cadastrada no calendário -->
             <ModalCalendario :tarefa="tarefaEmVisualizacao" :showModalCalendario="tarefaEmVisualizacao != null"
                 @update-tarefa.native="atualizarTarefaNoCalendario" @close-modal="tarefaEmVisualizacao = null"
                 @deletar-calendario="confirmarDeletarCalendario" @concluir-calendario="concluirTarefaCalendario" />
             <!-- Modal abre ao clicar em uma data qualquer no calendário -->
-            <ModalAdicionarTarefa :showModalAdicionar="showModalAdicionarTarefa" :newTarefa="newTarefa" :selectedDate="selectedDate"
-                @close-modal="showModalAdicionarTarefa = false" @adicionar-tarefa="adicionarTarefaCalendario" />
+            <ModalAdicionarTarefa :showModalAdicionar="showModalAdicionarTarefa" :newTarefa="newTarefa"
+                :selectedDate="selectedDate" @close-modal="showModalAdicionarTarefa = false"
+                @adicionar-tarefa="adicionarTarefaCalendario" />
             <!-- Modal de erro ao adicionar tarefa -->
             <ModalAlertaErroTitulo :alertaErroTitulo="exibirModalErro" @cancelar="fecharModalErro" />
             <ModalAlertaPreenchimento :alertaPreenchimento="exibirModalPreenchimento"
@@ -24,7 +32,8 @@
             <ModalDeletarTarefa v-if="deletarTarefa" :deletarTarefa="deletarTarefa" @deletar="removerTarefaCalendario"
                 @cancelar="cancelarDelete" />
             <!-- Modal aparece ao concluir uma tarefa -->
-            <ModalTarefaConcluida v-if="modalConcluir" :modalConcluir="modalConcluir != null"/>
+            <ModalTarefaConcluida v-if="modalConcluir" :modalConcluir="modalConcluir != null"
+                @fechar="modalConcluir = false" />
 
         </div>
     </div>
@@ -43,20 +52,22 @@ import ModalDeletarTarefa from '../../components/ModalDeletarTarefa/ModalDeletar
 import ModalAlertaErroTitulo from '../../components/ModalAlertaErroTitulo/ModalAlertaErroTitulo.vue';
 import ModalAlertaPreenchimento from '../../components/ModalAlertaPreenchimento/ModalAlertaPreenchimento.vue';
 import ModalTarefaConcluida from '../../components/ModalTarefaConcluida/ModalTarefaConcluida.vue';
-import { ChevronLeft, ChevronRight, CheckCircle } from 'lucide-vue-next';
+import ModalOrientacoes from '../../components/ModalOrientacoes/ModalOrientacoes.vue';
+import { ChevronLeft, ChevronRight, CheckCircle, Squircle } from 'lucide-vue-next';
 
 export default {
     extends: Metodos,
 
     components: {
-        ChevronRight, ChevronLeft, CheckCircle,
+        ChevronRight, ChevronLeft, CheckCircle, Squircle,
         FullCalendar,
         ModalCalendario,
         ModalAdicionarTarefa,
         ModalDeletarTarefa,
         ModalAlertaErroTitulo,
         ModalAlertaPreenchimento,
-        ModalTarefaConcluida
+        ModalTarefaConcluida,
+        ModalOrientacoes,
     },
 
     data() {
@@ -65,6 +76,7 @@ export default {
             showModalAdicionarTarefa: null,
             selectedDate: null,
             modalConcluir: null,
+            showModalOrientacoes: true,
         };
     },
 
@@ -75,7 +87,9 @@ export default {
                     title: tarefa.texto,
                     start: tarefa.data,
                     description: tarefa.descricao,
-                    task: tarefa
+                    task: tarefa,
+                    borderColor: this.getColor(tarefa.prioridade),
+
                 };
             });
         },
@@ -90,6 +104,8 @@ export default {
                 },
                 weekends: true,
                 locale: ptBrLocale,
+                contentHeight: 'auto',
+                handleWindowResize: true,
                 events: this.tarefasEmAndamento,
                 dateClick: this.handleDateClick,
                 eventClick: this.mostrarDescricao,
@@ -97,6 +113,7 @@ export default {
                 eventMouseLeave: this.mudarCursorParaPadrao,
                 editable: true,
                 eventDrop: this.handleEventDrop,
+                eventOrder: this.compararPrioridade,
             };
         },
     },
@@ -196,13 +213,50 @@ export default {
                 }, 1500);
             }
         },
+        getColor(prioridade) {
+            switch (prioridade) {
+                case 'Alta':
+                    return '#ff4003';
+                case 'Média':
+                    return '#f59e0b';
+                case 'Normal':
+                default:
+                    return '#007bff';
+            }
+        },
+        compararPrioridade(eventA, eventB) {
+            const prioridade = {
+                'Alta': 1,
+                'Média': 2,
+                'Normal': 3,
+            };
+            return prioridade[eventA.extendedProps.task.prioridade] - prioridade[eventB.extendedProps.task.prioridade];
+        },
+        toggleModalOrientacoes() {
+            this.showModalOrientacoes = !this.showModalOrientacoes;
+            localStorage.setItem('showModalOrientacoes', JSON.stringify(this.showModalOrientacoes));
+        },
+        fecharModalOrientacoes() {
+            this.showModalOrientacoes = false;
+            localStorage.setItem('showModalOrientacoes', JSON.stringify(this.showModalOrientacoes));
+        },
     },
+
+    mounted() {
+        const storedState = localStorage.getItem('showModalOrientacoes');
+        if (storedState !== null) {
+            this.showModalOrientacoes = JSON.parse(storedState);
+        } else {
+            this.showModalOrientacoes = true; // Define um valor padrão se não houver estado no localStorage
+        }
+    },
+
 
 }
 </script>
   
-<style scoped lang="css">
-h1 {
+<style  lang="css">
+.calendarioTitulo h1 {
     margin-bottom: 20px;
     text-align: center;
 }
@@ -210,6 +264,11 @@ h1 {
 .calendarioContainer {
     width: 70%;
     margin: 0 auto;
+}
+
+.orientações {
+    color: #9da3ae;
+    cursor: pointer;
 }
 
 .prevNext {
@@ -234,5 +293,19 @@ h1 {
 .prev:hover,
 .next:hover {
     background-color: #1A252F;
+}
+
+.fc-event-title {
+    font-size: 16px;
+    /* Ajuste o valor conforme necessário */
+}
+
+.fc-event {
+    border-width: 2px;
+    /* Ajuste o valor conforme necessário */
+    border-style: solid;
+    /* O estilo da borda, pode ser 'solid', 'dashed', etc. */
+    border-color: inherit;
+    /* Herda a cor da borda do evento */
 }
 </style>

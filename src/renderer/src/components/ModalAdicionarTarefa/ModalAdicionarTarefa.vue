@@ -5,6 +5,15 @@
             <h2>Adicionar Tarefa</h2>
 
             <p><strong>Data: </strong>{{ formatarData(newTarefa.data) }}</p>
+
+            <div class="prioridadeDropdown">
+                <label for="prioridade">Prioridade:</label>
+                <select v-model="newTarefa.prioridade">
+                    <option value="Normal">Normal</option>
+                    <option value="Média">Média</option>
+                    <option value="Alta">Alta</option>
+                </select>
+            </div>
             <input type="text" placeholder="Nova tarefa..." v-model="newTarefa.texto">
             <textarea placeholder="Descrição da tarefa..." v-model="newTarefa.descricao"></textarea>
 
@@ -31,7 +40,7 @@ export default {
     },
 
     methods: {
-        adicionaTarefaCalendario(){
+        adicionaTarefaCalendario() {
             this.$emit('adicionar-tarefa', this.newTarefa)
         }
     },
@@ -57,6 +66,7 @@ p {
     margin-top: 20px;
     color: #9da3ae;
 }
+
 .adicionarContainer {
 
     display: flex;
@@ -118,6 +128,29 @@ p {
 
     ::-webkit-calendar-picker-indicator {
         filter: invert(1);
+    }
+}
+
+.prioridadeDropdown {
+    margin-top: 20px;
+
+    label {
+        margin-right: 10px;
+        color: #9da3ae;
+    }
+
+    select {
+        box-sizing: border-box;
+        height: 28px;
+        border-radius: .25rem;
+        border: 1px solid #9da3ae;
+        color: #9da3ae;
+        padding: 5px;
+
+        option {
+            background-color: #2d3648;
+            color: #9da3ae;
+        }
     }
 }
 

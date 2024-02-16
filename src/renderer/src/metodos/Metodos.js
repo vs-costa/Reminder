@@ -12,6 +12,7 @@ export default {
             exibirModalErro: false,
             exibirModalPreenchimento: false,
             mostrarLegenda: true,
+            mostrarOrientacao: true,
             newTarefa: {
                 feito: false,
                 data: this.obterData(),

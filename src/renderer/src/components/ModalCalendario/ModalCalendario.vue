@@ -29,6 +29,21 @@
                         <span v-else>{{ tarefa.descricao }}</span>
                     </label>
                 </div>
+                <div class="prioridadeDropdown">
+                    <label>
+                        <h3>
+                            Prioridade:
+                        </h3>
+                        <select v-if="editMode" v-model="tarefa.prioridade">
+                            <option value="Normal">Normal</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                        </select>
+                        <span v-else>{{ tarefa.prioridade }}</span>
+                    </label>
+                </div>
+
+
                 <div class="layoutBotao">
                     <!-- Botão para concluir tarefa -->
                     <button v-if="!editMode" @click="concluirTarefaCalendario(tarefa)"
@@ -83,7 +98,7 @@ export default {
         confirmarDeletarCalendario(tarefa) {
             this.$emit('deletar-calendario', tarefa)
         },
-        concluirTarefaCalendario(tarefa){
+        concluirTarefaCalendario(tarefa) {
             this.$emit('concluir-calendario', tarefa)
         },
     },
@@ -146,7 +161,8 @@ export default {
     margin-left: 10px;
 }
 
-.botaoConcluir, .salvarEdicao {
+.botaoConcluir,
+.salvarEdicao {
     background-color: transparent;
     border: 1px solid #54ba91;
 
@@ -193,5 +209,26 @@ export default {
 .layoutBotao {
     background-color: transparent;
     margin-top: 20px;
+}
+
+.prioridadeDropdown {
+    margin-top: 10px;
+
+    select {
+        box-sizing: border-box;
+        height: 28px;
+        width: 200px;
+        border-radius: .25rem;
+        border: 1px solid #9da3ae;
+        color: #9da3ae;
+        padding: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        option {
+            background-color: #2d3648;
+            color: #9da3ae;
+        }
+    }
 }
 </style>
