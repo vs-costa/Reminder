@@ -256,9 +256,13 @@ export default {
 </script>
   
 <style  lang="css">
-.calendarioTitulo h1 {
-    margin-bottom: 20px;
-    text-align: center;
+.calendarioTitulo {
+
+    h1 {
+        margin-bottom: 20px;
+        text-align: center;
+
+    }
 }
 
 .calendarioContainer {
@@ -297,15 +301,15 @@ export default {
 
 .fc-event-title {
     font-size: 16px;
-    /* Ajuste o valor conforme necessário */
 }
 
 .fc-event {
     border-width: 2px;
-    /* Ajuste o valor conforme necessário */
     border-style: solid;
-    /* O estilo da borda, pode ser 'solid', 'dashed', etc. */
     border-color: inherit;
-    /* Herda a cor da borda do evento */
+    background-color: #1f2937;
+}
+.fc-day-today {
+  background-color: #2C3E50 !important;
 }
 </style>

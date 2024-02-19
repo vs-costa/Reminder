@@ -224,6 +224,7 @@ export default {
         padding: 5px;
         margin-top: 10px;
         margin-bottom: 10px;
+        background-color: #1f2937;
 
         option {
             background-color: #2d3648;

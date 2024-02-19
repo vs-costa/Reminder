@@ -280,6 +280,7 @@ hr {
         margin-bottom: 20px;
         color: #9da3ae;
         padding: 10px;
+        background-color: #1f2937;
 
         placeholder {
             color: #9da3ae;
@@ -296,6 +297,7 @@ hr {
         margin-bottom: 20px;
         color: #9da3ae;
         padding: 10px;
+        background-color: #1f2937;
     }
 
     input[type="text"]::placeholder {
@@ -304,10 +306,12 @@ hr {
 
     input[type="date"]::placeholder {
         color: #9da3ae;
+        
     }
 
     textarea::placeholder {
         color: #9da3ae;
+        
     }
 
     ::-webkit-calendar-picker-indicator {
@@ -346,6 +350,7 @@ hr {
     label {
         margin-right: 10px;
         color: #9da3ae;
+        
     }
 
     select {
@@ -355,6 +360,7 @@ hr {
         border: 1px solid #9da3ae;
         color: #9da3ae;
         padding: 5px;
+        background-color: #1f2937;
 
         option {
             background-color: #2d3648;

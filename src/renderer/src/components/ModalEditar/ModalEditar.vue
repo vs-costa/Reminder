@@ -124,6 +124,7 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+    
 
     label {
         margin-right: 10px;
@@ -137,6 +138,8 @@ export default {
         border: 1px solid #9da3ae;
         color: #9da3ae;
         padding: 5px;
+        background-color: #1f2937;
+        
 
         option {
             background-color: #2d3648;

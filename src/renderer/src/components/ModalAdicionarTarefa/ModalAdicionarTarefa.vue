@@ -74,6 +74,7 @@ p {
     margin-top: 30px;
     padding: 30px;
     border-radius: 8px;
+    background-color: #1f2937;
 
     button {
         margin-top: 20px;
@@ -96,6 +97,7 @@ p {
         margin-bottom: 10px;
         color: #9da3ae;
         padding: 10px;
+        background-color: #1f2937;
 
         placeholder {
             color: #9da3ae;
@@ -112,6 +114,7 @@ p {
         margin-bottom: 20px;
         color: #9da3ae;
         padding: 10px;
+        background-color: #1f2937;
     }
 
     input[type="text"]::placeholder {
@@ -146,6 +149,7 @@ p {
         border: 1px solid #9da3ae;
         color: #9da3ae;
         padding: 5px;
+        background-color: #1f2937;
 
         option {
             background-color: #2d3648;
