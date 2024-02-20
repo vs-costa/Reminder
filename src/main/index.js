@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -10,14 +10,39 @@ function createWindow() {
     width: 900,
     height: 670,
     show: false,
-    // frame: false,
+    frame: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
+      nodeIntegration: true,
       sandbox: false,
     },
   })
+
+  ipcMain.on('minimize-window', () => {
+    mainWindow.minimize()
+  })
+
+  ipcMain.on('maximize-window', () => {
+    mainWindow.maximize()
+  })
+
+  ipcMain.on('restore-window', () => {
+    mainWindow.restore()
+  })
+
+  ipcMain.on('close-window', () => {
+    mainWindow.close()
+  })
+
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('window-maximized');
+  });
+
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('window-restored');
+  });
 
   mainWindow.setBackgroundColor('#1f2937');
 
