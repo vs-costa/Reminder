@@ -5,7 +5,7 @@
 
       <div>
         <div class="nome">
-          <p>Reminder</p>
+          <p><strong>!</strong>Reminder</p>
         </div>
       </div>
 
@@ -37,7 +37,7 @@
 
     <div class="rodape">
       <p>Desenvolvido por <a href="https://github.com/vs-costa" target="_blank" rel="noopener noreferrer">Victor Soares |
-          Reminder </a> &copy; 2024</p>
+          <strong>!</strong>Reminder </a> &copy; 2024</p>
     </div>
   </div>
 </template>
@@ -135,7 +135,7 @@ export default {
 }
 
 .nome {
-  margin-left: 10px;
+  margin-left: 15px;
   color: #F5E8C7;
 }
 
