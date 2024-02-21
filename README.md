@@ -1,5 +1,7 @@
 # Reminder - Aplicativo de Gerenciamento de Tarefas
 
+
+
 ## Visão Geral
 
 **Reminder** é um aplicativo de gerenciamento de tarefas desenvolvido em Vue.js e Electron, proporcionando uma experiência desktop para organização pessoal. Este projeto surgiu da minha paixão por aplicativos de gerenciamento de tarefas e do desejo de aprimorar minhas habilidades em Vue.js e explorar o Electron para criar um aplicativo desktop funcional.
@@ -7,6 +9,8 @@
 ## Funcionalidades
 
 ### Página Inicial
+
+<img src="https://github.com/vs-costa/Reminder/blob/master/screenshots/Lista%20de%20Tarefas.png" alt="Lista de Tarefas" width="1080"/>
 
 A Página Inicial serve como um gerenciador simples de tarefas, onde é possível:
 
@@ -23,12 +27,16 @@ Ao lado direito de cada tarefa, há três botões:
 
 ### Página Tarefas Concluídas
 
+<img src="https://github.com/vs-costa/Reminder/blob/master/screenshots/Tarefas%20Conclu%C3%ADdas.png" alt="Tarefas Concluídas" width="1080"/>
+
 Após concluir uma tarefa, ela é transferida automaticamente para esta página, que apresenta uma lista das tarefas concluídas. Funcionalidades incluem:
 
 - Botão "Restaurar" para retornar uma tarefa à página inicial.
 - Botão "Limpar Tarefas Concluídas" para remover permanentemente todas as tarefas concluídas.
 
 ### Calendário
+
+<img src="https://github.com/vs-costa/Reminder/blob/master/screenshots/Calendario.png" alt="Tarefas Concluídas" width="1080"/>
 
 O Calendário oferece uma visualização alternativa e interativa das tarefas:
 
