@@ -1,34 +1,54 @@
-# reminder
+# Reminder - Aplicativo de Gerenciamento de Tarefas
 
-An Electron application with Vue
+## Visão Geral
 
-## Recommended IDE Setup
+**Reminder** é um aplicativo de gerenciamento de tarefas desenvolvido em Vue.js e Electron, proporcionando uma experiência desktop para organização pessoal. Este projeto surgiu da minha paixão por aplicativos de gerenciamento de tarefas e do desejo de aprimorar minhas habilidades em Vue.js e explorar o Electron para criar um aplicativo desktop funcional.
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## Funcionalidades
 
-## Project Setup
+### Página Inicial
 
-### Install
+A Página Inicial serve como um gerenciador simples de tarefas, onde é possível:
 
-```bash
-$ npm install
-```
+- Adicionar tarefas com título, prioridade, data e descrição.
+- Visualizar as tarefas organizadas por data e prioridade.
+- Destacar automaticamente tarefas atrasadas em vermelho.
+- Acessar a descrição completa da tarefa ao clicar no título.
 
-### Development
+Ao lado direito de cada tarefa, há três botões:
 
-```bash
-$ npm run dev
-```
+- **Concluir**: Marca a tarefa como concluída e a remove da página inicial.
+- **Editar**: Permite a edição das informações da tarefa.
+- **Excluir**: Apaga permanentemente a tarefa da lista.
 
-### Build
+### Página Tarefas Concluídas
 
-```bash
-# For windows
-$ npm run build:win
+Após concluir uma tarefa, ela é transferida automaticamente para esta página, que apresenta uma lista das tarefas concluídas. Funcionalidades incluem:
 
-# For macOS
-$ npm run build:mac
+- Botão "Restaurar" para retornar uma tarefa à página inicial.
+- Botão "Limpar Tarefas Concluídas" para remover permanentemente todas as tarefas concluídas.
 
-# For Linux
-$ npm run build:linux
-```
+### Calendário
+
+O Calendário oferece uma visualização alternativa e interativa das tarefas:
+
+- Cada tarefa é exibida na data correspondente com a borda colorida pela prioridade.
+- Possibilidade de cadastrar tarefas diretamente clicando na data desejada.
+- Arraste e solte para modificar a data de uma tarefa.
+- Modal de detalhes ao clicar em uma tarefa, com opções de concluir, editar e excluir.
+
+## Instalação
+
+Para utilizar o **Reminder**, siga os passos abaixo:
+
+1. Clone este repositório.
+2. Instale as dependências com `npm install`.
+3. Inicie o aplicativo com `npm run dev`.
+
+## Contribuição
+
+Sinta-se à vontade para contribuir, abrir issues ou sugerir melhorias. Toda colaboração é bem-vinda!
+
+## Licença
+
+Este projeto está sob a licença [MIT](LICENSE).
