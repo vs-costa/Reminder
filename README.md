@@ -53,6 +53,11 @@ Para utilizar o **Reminder**, siga os passos abaixo:
 2. Instale as dependências com `npm install`.
 3. Inicie o aplicativo com `npm run dev`.
 
+## Download
+
+- [Versão Executável (Windows)](https://drive.google.com/file/d/1Z2y_jJsLMzk8R9oByZDQtm6ZO5KgZ27E/view?usp=sharing)
+- Descompacte a pasta e execute o arquivo Reminder.exe.
+
 ## Contribuição
 
 Sinta-se à vontade para contribuir, abrir issues ou sugerir melhorias. Toda colaboração é bem-vinda!
