@@ -55,7 +55,7 @@ Para utilizar o **Reminder**, siga os passos abaixo:
 
 ## Download
 
-- [Versão Executável (Windows)](https://drive.google.com/file/d/1Z2y_jJsLMzk8R9oByZDQtm6ZO5KgZ27E/view?usp=sharing)
+- [Versão Executável (Windows)](https://drive.google.com/file/d/1Xnanaz_JbAGtv-2Ob2ww9vh9_v2gSnFO/view?usp=sharing)
 - Descompacte a pasta e execute o arquivo Reminder.exe.
 
 ## Contribuição
